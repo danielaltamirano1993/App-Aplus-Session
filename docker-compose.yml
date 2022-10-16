@@ -1,0 +1,28 @@
+version: "3"
+services:
+  package:
+    image: registry.gitlab.com/aplus-framework/images/package:2
+    container_name: package-session
+    working_dir: /package
+    volumes:
+      - .:/package
+    depends_on:
+      - mariadb
+      - memcached
+      - redis
+    tty: true
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: framework-tests
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    container_name: session-mariadb
+  memcached:
+    image: memcached:alpine
+    container_name: session-memcached
+  redis:
+    image: redis:alpine
+    container_name: session-redis
